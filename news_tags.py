@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from wapo import WaPoScraper()
+
 #Instantiate scraper class
 wapo = WaPoScraper()
 

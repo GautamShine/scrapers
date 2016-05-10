@@ -1,16 +1,24 @@
 #!/usr/bin/env python
 
 from scraper import Scraper
-from selenium import Chrome
+from selenium.webdriver.common.keys import Keys
 
 class WaPoScraper(Scraper):
-    def __init__:
-        pass
+    """
+    Derived class for scraping Washington Post articles
+    """
+    def __init__(self):
+        super(WaPoScraper, self).__init__()
+        self.base_url = 'http://www.washingtonpost.com'
 
-    def get_urls(base_url):
-        pass
+    def get_urls(self):
+        self.driver.get(self.base_url)
+        self.driver.find_element_by_id('search-btn').click()
+        self.driver.find_element_by_id('search-field').send_keys('*', Keys.ENTER)
+        # get urls
+        self.driver.find_element_by_css_selector('.page-link.next').click()
 
-    def get_labels(urls):
+    def get_labels(self, urls):
 
         # Tag in source
         tag_headline = 'meta'
