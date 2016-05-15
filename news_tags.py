@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 
-from wapo import WaPoScraper()
+from wapo import WaPoScraper
 
 #Instantiate scraper class
 wapo = WaPoScraper()
 
-# Base url to crawl from
-base_url = 'http://www.washingtonpost.com'
-
 # Get urls by crawling
-urls = wapo.get_urls(10)
+urls = wapo.get_urls(100)
 
 # Get article headlines and tags
-articles, labels = wapo.get_labels()
+articles, labels = wapo.get_labels(urls)
 
 for i in range(len(articles)):
-    print(headline[i])
+    print(articles[i])
     print(labels[i])
+    print('\n')

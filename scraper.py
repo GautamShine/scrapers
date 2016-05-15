@@ -17,17 +17,21 @@ class Scraper:
         """
         Retrieves a tag in a url's source, optionally extracting content
         """
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'lxml')
-        parse = soup.find(tag, attrs)
+        try:
+            response = requests.get(url)
+            soup = BeautifulSoup(response.content, 'lxml')
+            parse = soup.find(tag, attrs)
 
-        # Optionally extract a target attribute
-        if target:
-            parse = parse[target]
+            # Optionally extract a target attribute
+            if target:
+                parse = parse[target]
 
-        # Optionally apply a regex
-        if regex:
-            parse = re.findall(regex, str(parse))
+            # Optionally apply a regex
+            if regex:
+                parse = re.findall(regex, str(parse))
+
+        except:
+            parse = None
 
         return parse
 
