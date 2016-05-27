@@ -6,12 +6,18 @@ from wapo import WaPoScraper
 wapo = WaPoScraper()
 
 # Get urls by crawling
-urls = wapo.get_urls(100)
+num_urls = 5
+min_page = 0
+urls = wapo.get_urls(num_urls, min_page)
 
 # Get article headlines and tags
-articles, labels = wapo.get_labels(urls)
+headlines, labels = wapo.get_labels(urls)
 
-for i in range(len(articles)):
-    print(articles[i])
+for i in range(len(headlines)):
+    print(headlines[i])
     print(labels[i])
     print('\n')
+
+wapo.format_store(headlines, labels)
+
+

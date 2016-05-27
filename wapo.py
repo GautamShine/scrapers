@@ -10,18 +10,18 @@ class WaPoScraper(Scraper):
     """
     def __init__(self):
         super(WaPoScraper, self).__init__()
-        self.base_url = 'http://www.washingtonpost.com'
 
-    def get_urls(self, num_urls):
+    def get_urls(self, num_urls, min_page):
         """
         Returns a list of URLs to news articles using search
         """
         urls = []
         # Enter WaPo search
-        self.driver.get(self.base_url)
+        self.driver.get('http://www.washingtonpost.com')
         self.driver.find_element_by_id('search-btn').click()
         self.driver.find_element_by_id('search-field').send_keys('*', Keys.ENTER)
 
+        page = 0
         while len(urls) < num_urls:
             # Get post-JavaScript
             html = self.driver.execute_script("return document.documentElement.innerHTML;")
@@ -30,11 +30,12 @@ class WaPoScraper(Scraper):
 
             # Store news urls
             for i in range(len(news_items)):
-                if len(urls) < num_urls:
+                if len(urls) < num_urls and page > min_page:
                     urls.append('http://' + news_items[i]['data-sid'])
 
             # Advance to next search page
             self.driver.find_element_by_css_selector('.page-link.next').click()
+            page += 1
 
         return urls
 
@@ -69,3 +70,18 @@ class WaPoScraper(Scraper):
                 article_labels.append(labels.split(', '))
 
         return article_headlines, article_labels
+
+    def format_store(self, headlines, labels):
+        """
+        Formats the input to write to file
+        """
+        headline_files = []
+        label_files = []
+        for i,headline in enumerate(headlines):
+            headline_files.append('data/W_' + str(i) + '.txt')
+
+        for i,tags in enumerate(labels):
+            label_files.append('data/W_' + str(i) + '.key')
+
+        self.write(headlines, headline_files)
+        self.write(labels, label_files)
