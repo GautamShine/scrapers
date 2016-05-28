@@ -71,9 +71,25 @@ class WaPoScraper(Scraper):
 
         return article_headlines, article_labels
 
+    def sanitize_labels(self, headlines, labels):
+        """
+        Removes human-annotated labels that did not occur in headlines
+        """
+        assert len(headlines) == len(labels)
+
+        headline_lemmas = self.lemmatize(headlines)
+        label_lemmas = self.lemmatize(labels)
+
+        sanitized_labels = []
+        for i,headline in enumerate(headline_lemmas):
+            intersection = set(headline) & set(label_lemmas[i])
+            sanitized_labels.append(intersection)
+
+        return sanitized_labels
+
     def format_store(self, headlines, labels):
         """
-        Formats the input to write to file
+        Write to files in .txt/.key format used by keyword extractors
         """
         headline_files = []
         label_files = []

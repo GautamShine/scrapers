@@ -15,15 +15,28 @@ class Scraper:
         self.driver = webdriver.Firefox()
         self.nlp = English()
 
-    def lemmatize(self, texts):
+    def lemmatize(self, texts, flatten=False):
         """
         Lemmatizes each word, i.e. lower case and no inflection
         """
-        text_lemmas = []
-        for text in texts:
-            if type(text) != unicode:
-                text = text.decode('utf-8')
-            text_lemmas.append([w.lemma_ for w in self.nlp(text) if not w.is_stop])
+        if type(texts) is str:
+            text_lemmas = [w.lemma_ for w in self.nlp(text) if not w.is_stop]
+
+        elif type(texts) is list:
+            text_lemmas = []
+            for text in texts:
+                if type(text) is str: 
+                    text_lemmas.append([w.lemma_ for w in self.nlp(text) if not w.is_stop])
+                elif type(text) is list:
+                    text_item_lemmas = []
+                    for text_item in text:
+                        print(text_item)
+                        text_item_lemmas.extend([w.lemma_ for w in self.nlp(text_item) if not w.is_stop])
+                    print(text_item_lemmas)
+                    text_lemmas.append(text_item_lemmas)
+ 
+                else:
+                    raise TypeError('Lemmatize input not a list of lists or strings')
 
         return text_lemmas
 
@@ -51,7 +64,7 @@ class Scraper:
 
     def write(self, write_items, write_files):
         """
-        Expects a list of lists of lists (respectively: files, rows, items in row)
+        Writes a string to file or a list of strings separated by newlines
         """
         files = []
         for f in write_files:
@@ -64,7 +77,7 @@ class Scraper:
             elif type(item) is str:
                 files[i].write(item + '\n')
             else:
-                pass
+                raise TypeError('Write input not a string or list of strings')
 
         for f in files:
             f.close()
