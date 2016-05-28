@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from spacy.en import English
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import requests
@@ -12,6 +13,19 @@ class Scraper:
     """
     def __init__(self):
         self.driver = webdriver.Firefox()
+        self.nlp = English()
+
+    def lemmatize(self, texts):
+        """
+        Lemmatizes each word, i.e. lower case and no inflection
+        """
+        text_lemmas = []
+        for text in texts:
+            if type(text) != unicode:
+                text = text.decode('utf-8')
+            text_lemmas.append([w.lemma_ for w in self.nlp(text) if not w.is_stop])
+
+        return text_lemmas
 
     def parse_url(self, url, tag, attrs=None, target=None, regex=None):
         """
