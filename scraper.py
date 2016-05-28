@@ -15,24 +15,25 @@ class Scraper:
         self.driver = webdriver.Firefox()
         self.nlp = English()
 
-    def lemmatize(self, texts, flatten=False):
+    def lemmatize(self, texts):
         """
         Lemmatizes each word, i.e. lower case and no inflection
         """
+        lem = lambda x: [w.lemma_ for w in self.nlp(x) if not (w.is_stop or w.is_punct)]
+
         if type(texts) is str:
-            text_lemmas = [w.lemma_ for w in self.nlp(text) if not w.is_stop]
+            text_lemmas = lem(text)
 
         elif type(texts) is list:
             text_lemmas = []
             for text in texts:
                 if type(text) is str: 
-                    text_lemmas.append([w.lemma_ for w in self.nlp(text) if not w.is_stop])
+                    text_lemmas.append(lem(text))
+
                 elif type(text) is list:
                     text_item_lemmas = []
                     for text_item in text:
-                        print(text_item)
-                        text_item_lemmas.extend([w.lemma_ for w in self.nlp(text_item) if not w.is_stop])
-                    print(text_item_lemmas)
+                        text_item_lemmas.extend(lem(text_item))
                     text_lemmas.append(text_item_lemmas)
  
                 else:

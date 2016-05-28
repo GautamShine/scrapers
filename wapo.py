@@ -80,24 +80,28 @@ class WaPoScraper(Scraper):
         headline_lemmas = self.lemmatize(headlines)
         label_lemmas = self.lemmatize(labels)
 
+        sanitized_headlines = []
         sanitized_labels = []
         for i,headline in enumerate(headline_lemmas):
-            intersection = set(headline) & set(label_lemmas[i])
-            sanitized_labels.append(intersection)
+            intersection = list(set(headline) & set(label_lemmas[i]))
+            # include only non-empty intersections
+            if intersection:
+               sanitized_headlines.append(headlines[i])
+               sanitized_labels.append(intersection)
 
-        return sanitized_labels
+        return sanitized_headlines, sanitized_labels
 
-    def format_store(self, headlines, labels):
+    def format_store(self, headlines, labels, prefix):
         """
         Write to files in .txt/.key format used by keyword extractors
         """
         headline_files = []
         label_files = []
         for i,headline in enumerate(headlines):
-            headline_files.append('data/W_' + str(i) + '.txt')
+            headline_files.append('data/' + prefix + '_' + str(i) + '.txt')
 
         for i,tags in enumerate(labels):
-            label_files.append('data/W_' + str(i) + '.key')
+            label_files.append('data/' + prefix + '_' + str(i) + '.key')
 
         self.write(headlines, headline_files)
         self.write(labels, label_files)

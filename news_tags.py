@@ -6,21 +6,14 @@ from wapo import WaPoScraper
 wapo = WaPoScraper()
 
 # Get urls by crawling
-num_urls = 5
+num_urls = 50
 min_page = 0
 urls = wapo.get_urls(num_urls, min_page)
 
 # Get article headlines and tags
 headlines, labels = wapo.get_labels(urls)
 
-sanitized_labels = wapo.sanitize_labels(headlines, labels)
+# Remove labels that don't occur in headline and any empty label headlines
+headlines, labels = wapo.sanitize_labels(headlines, labels)
 
-for i in range(len(headlines)):
-    print(headlines[i])
-    print(labels[i])
-    print(sanitized_labels[i])
-    print('\n')
-
-wapo.format_store(headlines, labels)
-
-
+wapo.format_store(headlines, labels, 'W')
