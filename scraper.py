@@ -19,21 +19,21 @@ class Scraper:
         """
         Lemmatizes each word, i.e. lower case and no inflection
         """
-        lem = lambda x: [w.lemma_ for w in self.nlp(x) if not (w.is_stop or w.is_punct)]
+        lems = lambda x: [w.lemma_ for w in self.nlp(x) if not (w.is_stop or w.is_punct)]
 
         if type(texts) is str:
-            text_lemmas = lem(text)
+            text_lemmas = lems(text)
 
         elif type(texts) is list:
             text_lemmas = []
             for text in texts:
                 if type(text) is str: 
-                    text_lemmas.append(lem(text))
+                    text_lemmas.append(lems(text))
 
                 elif type(text) is list:
                     text_item_lemmas = []
                     for text_item in text:
-                        text_item_lemmas.extend(lem(text_item))
+                        text_item_lemmas.extend(lems(text_item))
                     text_lemmas.append(text_item_lemmas)
  
                 else:
