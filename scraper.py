@@ -2,6 +2,7 @@
 
 from spacy.en import English
 from selenium import webdriver
+from pyvirtualdisplay import Display
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -12,6 +13,7 @@ class Scraper:
     Base class for scraping sites with Selenium and Beautiful Soup
     """
     def __init__(self):
+        display = Display(visible=0, size=(1920, 1080)).start()
         self.driver = webdriver.Firefox()
         self.nlp = English()
 

@@ -19,6 +19,7 @@ class WaPoScraper(Scraper):
         urls = []
         # Enter WaPo search
         self.driver.get('http://www.washingtonpost.com')
+        self.driver.set_window_size(1920, 1080)
         self.driver.find_element_by_id('search-btn').click()
         self.driver.find_element_by_id('search-field').send_keys('the or to or of or a', Keys.ENTER)
 
