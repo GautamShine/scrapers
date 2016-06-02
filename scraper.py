@@ -13,7 +13,8 @@ class Scraper:
     Base class for scraping sites with Selenium and Beautiful Soup
     """
     def __init__(self):
-        display = Display(visible=0, size=(1920, 1080)).start()
+        self.display = Display(visible=0, size=(1920, 1080))
+        self.display.start()
         self.driver = webdriver.Firefox()
         self.nlp = English()
 
@@ -39,7 +40,11 @@ class Scraper:
                     text_lemmas.append(text_item_lemmas)
  
                 else:
-                    raise TypeError('Lemmatize input not a list of lists or strings')
+                    print(type(text), text)
+                    raise TypeError('Lemmatize list items are not strings or lists')
+        else:
+            print(type(texts), texts)
+            raise TypeError('Lemmatize input is not a string or list')
 
         return text_lemmas
 
@@ -74,13 +79,14 @@ class Scraper:
             files.append(open(f, 'w'))
 
         for i,item in enumerate(write_items):
-            if type(item) is list:
+            if type(item) is str:
+                files[i].write(item + '\n')
+            elif type(item) is list:
                 for row in item:
                     files[i].write(row + '\n')
-            elif type(item) is str:
-                files[i].write(item + '\n')
             else:
-                raise TypeError('Write input not a string or list of strings')
+                print(type(item), item)
+                raise TypeError('Write input is not a string or list')
 
         for f in files:
             f.close()

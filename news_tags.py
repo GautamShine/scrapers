@@ -6,7 +6,7 @@ from wapo import WaPoScraper
 wapo = WaPoScraper()
 
 # Get urls by crawling
-num_urls = 5
+num_urls = 1000
 min_page = 1
 
 wapo.crawl(num_urls, min_page, store=True)
