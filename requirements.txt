@@ -1,6 +1,6 @@
 pyvirtualdisplay
-install selenium
-install spacy
+selenium
+spacy
 # python -m spacy.en.download
 # sudo apt-get install xvfb xserver-xephyr vnc4server
 

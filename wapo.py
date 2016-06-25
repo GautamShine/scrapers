@@ -52,10 +52,13 @@ class WaPoScraper(Scraper):
 
                     # Sanitized data
                     headlines, labels, appears = self.sanitize_labels(orig_headlines, orig_labels)
-                    if labels:
+                    if len(labels) > 1:
                         suffix = [suffix[i] for i in range(len(orig_labels)) if appears[i]]
                         self.format_store(headlines, labels, 'data/', 'W', suffix)
-                        urls = []
+                    elif len(labels) == 1:
+                        suffix = [suffix[i] for i in range(len(orig_labels)) if appears[i]]
+                        self.format_store(headlines, labels, 'data/', 'W1', suffix)                       
+                urls = []
 
             # Advance to next search page
             self.driver.find_element_by_css_selector('.page-link.next').click()
@@ -118,11 +121,21 @@ class WaPoScraper(Scraper):
             # include only non-empty intersections
             if intersection:
                label_list = []
+               # return headline words, not original tags
+               print(intersection)
+               for w in headlines[i]:
+                   print(w)
+                   if self.nlp(w):
+                      print(self.nlp(w)[0].lemma_)
+                      if self.nlp(w)[0].lemma_ in intersection:
+                          label_list.append(w)
+
                # return original tags, not lemmas
-               for label in labels[i]:
-                   # include a label its lemmas are a subset of the intersection
-                   if label and (lems(label) <= intersection):
-                       label_list.append(label)
+               #for label in labels[i]:
+               #    # include a label its lemmas are a subset of the intersection
+               #    if label and (lems(label) <= intersection):
+               #        label_list.append(label)
+
                if label_list:
                    appears[i] = True
                    sanitized_headlines.append(headlines[i])

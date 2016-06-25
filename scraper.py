@@ -12,10 +12,11 @@ class Scraper:
     """
     Base class for scraping sites with Selenium and Beautiful Soup
     """
-    def __init__(self):
+    def __init__(self, driver_path):
         self.display = Display(visible=0, size=(1920, 1080))
         self.display.start()
-        self.driver = webdriver.Firefox()
+        # Firefox 47+ is incomparible with Selenium 2.53+; use Chrome
+        self.driver = webdriver.Chrome(driver_path)
         self.nlp = English()
 
     def lemmatize(self, texts):
